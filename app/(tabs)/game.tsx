@@ -8,14 +8,7 @@ type Props = StackScreenProps<RootStackParamList, 'game'>;
 const GameScreen: React.FC<Props> = ({ navigation }) => {
   const [currentNumber, setCurrentNumber] = useState(generateRandomNumber());
   const [nextNumber, setNextNumber] = useState(generateRandomNumber());
-  const [targetNumber, setTargetNumber] = useState(nextNumber);
   const [score, setScore] = useState(0);
-
-  useEffect(() => {
-    if (currentNumber === nextNumber) {
-      setNextNumber(generateRandomNumber());
-    }
-  }, [currentNumber, nextNumber]);
 
   const handleGuess = (guess: 'higher' | 'lower') => {
     const isCorrect =
@@ -25,11 +18,9 @@ const GameScreen: React.FC<Props> = ({ navigation }) => {
     if (isCorrect) {
       setScore(score + 1);
       setCurrentNumber(nextNumber);
-      const newNumber = generateRandomNumber();
-      setNextNumber(newNumber);
-      setTargetNumber(newNumber);
+      setNextNumber(generateRandomNumber());
     } else {
-      Alert.alert('Game Over', `Your score: ${score}\nThe number to beat was: ${targetNumber}`, [
+      Alert.alert('Game Over', `Your score: ${score}\nThe number to beat was: ${nextNumber}`, [
         { text: 'Play Again', onPress: resetGame },
       ]);
     }
@@ -37,11 +28,8 @@ const GameScreen: React.FC<Props> = ({ navigation }) => {
 
   const resetGame = () => {
     setScore(0);
-    const newCurrentNumber = generateRandomNumber();
-    const newNextNumber = generateRandomNumber();
-    setCurrentNumber(newCurrentNumber);
-    setNextNumber(newNextNumber);
-    setTargetNumber(newNextNumber);
+    setCurrentNumber(generateRandomNumber());
+    setNextNumber(generateRandomNumber());
   };
 
   return (
