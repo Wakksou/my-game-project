@@ -3,6 +3,8 @@
     "name": "MyGameProject",
     "slug": "MyGameProject",
     "version": "1.0.0",
+    "assetBundlePatterns": ["**/*"],
+    "plugins": ["expo-router"],
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
@@ -26,9 +28,6 @@
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
-    "plugins": [
-      "expo-router"
-    ],
     "experiments": {
       "typedRoutes": true
     }
