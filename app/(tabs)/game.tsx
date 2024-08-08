@@ -20,9 +20,13 @@ const GameScreen: React.FC<Props> = ({ navigation }) => {
       setCurrentNumber(nextNumber);
       setNextNumber(generateRandomNumber());
     } else {
-      Alert.alert('Game Over', `Your score: ${score}\nThe number to beat was: ${nextNumber}`, [
-        { text: 'Play Again', onPress: resetGame },
-      ]);
+      Alert.alert(
+        'Game Over',
+        `Your score: ${score}\nYou guessed: ${guess}\nCurrent number: ${currentNumber}\nNext number: ${nextNumber}`,
+        [
+          { text: 'Play Again', onPress: resetGame },
+        ]
+      );
     }
   };
 
