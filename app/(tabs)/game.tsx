@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Button, StyleSheet, Alert } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParamList } from '../../types'; // Ajustez le chemin si nécessaire
+import LottieView from 'lottie-react-native';
 
 type Props = StackScreenProps<RootStackParamList, 'game'>;
 
@@ -9,6 +10,7 @@ const GameScreen: React.FC<Props> = ({ navigation }) => {
   const [currentNumber, setCurrentNumber] = useState(generateRandomNumber());
   const [nextNumber, setNextNumber] = useState(generateRandomNumber());
   const [score, setScore] = useState(0);
+  const [showAnimation, setShowAnimation] = useState(false);
 
   const handleGuess = (guess: 'higher' | 'lower') => {
     const isCorrect =
@@ -20,13 +22,7 @@ const GameScreen: React.FC<Props> = ({ navigation }) => {
       setCurrentNumber(nextNumber);
       setNextNumber(generateRandomNumber());
     } else {
-      Alert.alert(
-        'Game Over',
-        `Your score: ${score}\nYou guessed: ${guess}\nCurrent number: ${currentNumber}\nNext number: ${nextNumber}`,
-        [
-          { text: 'Play Again', onPress: resetGame },
-        ]
-      );
+      setShowAnimation(true);
     }
   };
 
@@ -34,16 +30,29 @@ const GameScreen: React.FC<Props> = ({ navigation }) => {
     setScore(0);
     setCurrentNumber(generateRandomNumber());
     setNextNumber(generateRandomNumber());
+    setShowAnimation(false);
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Current Number: {currentNumber}</Text>
-      <View style={styles.buttonContainer}>
-        <Button title="Higher" onPress={() => handleGuess('higher')} />
-        <Button title="Lower" onPress={() => handleGuess('lower')} />
-      </View>
-      <Text style={styles.score}>Score: {score}</Text>
+      {showAnimation ? (
+        <LottieView
+          source={require('../../assets/animations/looser.json')}
+          autoPlay
+          loop={false}
+          onAnimationFinish={resetGame}
+          style={styles.lottie}
+        />
+      ) : (
+        <>
+          <Text style={styles.title}>Current Number: {currentNumber}</Text>
+          <View style={styles.buttonContainer}>
+            <Button title="Higher" onPress={() => handleGuess('higher')} />
+            <Button title="Lower" onPress={() => handleGuess('lower')} />
+          </View>
+          <Text style={styles.score}>Score: {score}</Text>
+        </>
+      )}
     </View>
   );
 };
@@ -56,6 +65,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 16,
+  },
+  lottie: {
+    width: 300,
+    height: 300,
   },
   title: {
     fontSize: 24,
